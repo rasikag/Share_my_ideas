@@ -74,10 +74,10 @@ app.get('/ideas/add', (req, res)=>{
 // save the idea 
 app.post('/ideas',(req,res)=>{
   let errors = [];
-  if(!res.body.title){
+  if(!req.body.title){
       errors.push({text: 'Please add a title'});
   }
-  if(!res.body.details){
+  if(!req.body.details){
       errors.push({text: 'Please add some details'});
   }
   if(errors.length > 0){

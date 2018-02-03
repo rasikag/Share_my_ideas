@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+require('../models/Idea');
+const Idea = mongoose.model('ideas');
 
 // ideas index page 
-router.get('/ideas',(req,res)=> {
+router.get('/',(req,res)=> {
     Idea.find({})
         .sort({date:'desc'})
         .then(ideas => {
@@ -14,12 +18,12 @@ router.get('/ideas',(req,res)=> {
   
 // show idea form 
 // here you can add a idea to application
-router.get('/ideas/add', (req, res)=>{
+router.get('/add', (req, res)=>{
 res.render('ideas/add');
 });
   
   // save the idea 
-router.post('/ideas',(req,res)=>{
+router.post('/',(req,res)=>{
 let errors = [];
 if(!req.body.title){
     errors.push({text: 'Please add a title'});
@@ -48,7 +52,7 @@ if(errors.length > 0){
 });
   
 // Edit ideas
-router.get('/ideas/edit/:id', (req, res)=>{
+router.get('/edit/:id', (req, res)=>{
 Idea.findOne({
     _id : req.params.id
 })

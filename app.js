@@ -10,6 +10,9 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 8081;
 
+// Load routes 
+const ideas = require('./routes/ideas');
+
 // map global warning 
 mongoose.Promise = global.Promise; 
 
@@ -24,8 +27,7 @@ mongoose.connect('mongodb://localhost/vid-upload-app',{
     console.log(err);
   });
 
-require('./models/Idea');
-const Idea = mongoose.model('ideas');
+
 
 // handlebars middleware
 app.engine('handlebars', exphbs({
@@ -85,6 +87,9 @@ app.get('/users/login',(req, res) => {
 app.get('/users/register',(req, res)=>{
 
 });
+
+// Use ideas files 
+app.use('/ideas',ideas);
 
 app.listen(port , () => {
   console.log(`Server start on port ${port}`);

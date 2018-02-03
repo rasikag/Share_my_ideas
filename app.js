@@ -6,12 +6,12 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
 
-
 const app = express();
 const port = 8081;
 
 // Load routes 
 const ideas = require('./routes/ideas');
+const users = require('./routes/users');
 
 // map global warning 
 mongoose.Promise = global.Promise; 
@@ -26,8 +26,6 @@ mongoose.connect('mongodb://localhost/vid-upload-app',{
   .catch((err)=>{
     console.log(err);
   });
-
-
 
 // handlebars middleware
 app.engine('handlebars', exphbs({
@@ -77,19 +75,9 @@ app.get('/about' , (req, res)=>{
   res.render('about');
 });
 
-
-
-// User login route
-app.get('/users/login',(req, res) => {
-  res.send('login');
-});
-
-app.get('/users/register',(req, res)=>{
-
-});
-
 // Use ideas files 
 app.use('/ideas',ideas);
+app.use('/users',users);
 
 app.listen(port , () => {
   console.log(`Server start on port ${port}`);

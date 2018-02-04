@@ -3,6 +3,7 @@ const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const passport = require('passport');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
 
@@ -12,6 +13,9 @@ const port = 8081;
 // Load routes 
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
+
+// Passport config 
+require('./config/passport')(passport);
 
 // map global warning 
 mongoose.Promise = global.Promise; 

@@ -9,12 +9,12 @@ require('../models/User');
 const User = mongoose.model('users');
 
 // User login route
-router.get('/login',(req, res) => {
+router.get('/login', (req, res) => {
     res.render('users/login');
 });
 
 // Login form post
-router.post('/login', (req , res, next) => {
+router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: 'login',
@@ -23,48 +23,48 @@ router.post('/login', (req , res, next) => {
 });
 
 // User register route 
-router.get('/register',(req, res)=>{
+router.get('/register', (req, res) => {
     res.render('users/register');
 });
 
-router.post('/register' , (req,res)=>{
+router.post('/register', (req, res) => {
     console.log(req.body);
 
     let errors = [];
-    if(req.body.password != req.body.confirmPassword){
-        errors.push({ text : 'Password do not match'});
+    if (req.body.password != req.body.confirmPassword) {
+        errors.push({ text: 'Password do not match' });
     }
-    if(req.body.password.length < 4 ){
-        errors.push({ text : 'Password length should be  more that 4 chars'});
+    if (req.body.password.length < 4) {
+        errors.push({ text: 'Password length should be  more that 4 chars' });
     }
-    if(errors.length > 0){
+    if (errors.length > 0) {
         res.render('users/register', {
-            errors : errors,
-            name : req.body.name,
-            email : req.body.email
+            errors: errors,
+            name: req.body.name,
+            email: req.body.email
         });
     } else {
 
-        User.findOne({ email : req.body.email})
-            .then( user => {
-                if(user){
+        User.findOne({ email: req.body.email })
+            .then(user => {
+                if (user) {
                     req.flash('error_msg', 'email already registered');
                     res.redirect('/users/login');
                 } else {
                     const newUser = new User({
-                        name : req.body.name,
-                        email : req.body.email,
-                        password : req.body.email
+                        name: req.body.name,
+                        email: req.body.email,
+                        password: req.body.email
                     });
-            
+
                     bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password , salt, (err, hash) => {
-                            if(err) throw err;
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                            if (err) throw err;
                             newUser.password = hash;
                             newUser.save()
                                 .then(user => {
-                                    req.flash('success_msg', 
-                                    'You are successfully registered to the system');
+                                    req.flash('success_msg',
+                                        'You are successfully registered to the system');
                                     res.redirect('/users/login');
                                 })
                                 .catch(err => {
@@ -76,7 +76,13 @@ router.post('/register' , (req,res)=>{
                 }
             });
     }
-    
 });
+
+// Logout user 
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/users/login');
+})
 
 module.exports = router;

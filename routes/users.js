@@ -14,7 +14,24 @@ router.get('/register',(req, res)=>{
 
 router.post('/register' , (req,res)=>{
     console.log(req.body);
-    res.send('register');
+
+    let errors = [];
+    if(req.body.password != req.body.confirmPassword){
+        errors.push({ text : 'Password do not match'});
+    }
+    if(req.body.password.length < 4 ){
+        errors.push({ text : 'Password length should be  more that 4 chars'});
+    }
+    if(errors.length > 0){
+        res.render('users/register', {
+            errors : errors,
+            name : req.body.name,
+            email : req.body.email
+        });
+    } else {
+        res.send('pass');
+    }
+    
 });
 
 module.exports = router;

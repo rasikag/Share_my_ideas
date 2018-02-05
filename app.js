@@ -8,7 +8,7 @@ const flash = require('connect-flash');
 const mongoose = require('mongoose');
 
 const app = express();
-const port = 8081;
+const port = process.env.PORT || 8081;
 
 // Load routes 
 const ideas = require('./routes/ideas');
@@ -17,11 +17,14 @@ const users = require('./routes/users');
 // Passport config 
 require('./config/passport')(passport);
 
+// DB config 
+const db = require('./config/database');
+
 // map global warning 
 mongoose.Promise = global.Promise; 
 
 // connect to mongoose
-mongoose.connect('mongodb://localhost/vid-upload-app',{
+mongoose.connect(db.mongoURI,{
   useMongoClient: true
 })
   .then(()=>{
